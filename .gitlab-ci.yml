@@ -1,0 +1,30 @@
+image: bitnami/git:2.36.1
+
+stages:
+  - clone-source-repository
+  - push-destination-repository
+
+clone:
+  stage: clone-source-repository
+  script:
+    - mkdir -p ~/.ssh/
+    - echo "$SOURCE_SSH_SECRET" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H $SOURCE_REPO_DOMAIN >> ~/.ssh/known_hosts
+    - git clone $SOURCE_REPO repository
+  artifacts:
+    paths:
+      - repository
+    untracked: false
+    expire_in: 30 days
+push:
+  stage: push-destination-repository
+  dependencies:
+    - clone
+  script:
+    - mkdir -p ~/.ssh/
+    - echo "$DESTINATION_SSH_SECRET" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa  
+    - ssh-keyscan -H $DESTINATION_REPO_DOMAIN >> ~/.ssh/known_hosts
+    - cd repository
+    - git push -f $DESTINATION_REPO
