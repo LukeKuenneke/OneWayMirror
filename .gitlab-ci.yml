@@ -11,7 +11,7 @@ clone:
     - echo "$SOURCE_SSH_SECRET" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H $SOURCE_REPO_DOMAIN >> ~/.ssh/known_hosts
-    - git clone $SOURCE_REPO repository
+    - git clone --bare $SOURCE_REPO repository
   artifacts:
     paths:
       - repository
@@ -27,4 +27,4 @@ push:
     - chmod 600 ~/.ssh/id_rsa  
     - ssh-keyscan -H $DESTINATION_REPO_DOMAIN >> ~/.ssh/known_hosts
     - cd repository
-    - git push -f $DESTINATION_REPO
+    - git push --mirror -f $DESTINATION_REPO
