@@ -27,4 +27,4 @@ push:
     - chmod 600 ~/.ssh/id_rsa  
     - ssh-keyscan -H $DESTINATION_REPO_DOMAIN >> ~/.ssh/known_hosts
     - cd repository
-    - git push --mirror -f $DESTINATION_REPO
+    - git push --mirror $DESTINATION_REPO
